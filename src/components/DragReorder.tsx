@@ -46,7 +46,7 @@ function GripDots({ dragControls }: { dragControls: ReturnType<typeof useDragCon
             width: 5,
             height: 5,
             borderRadius: '50%',
-            backgroundColor: '#B0B0B0',
+            backgroundColor: '#666',
           }}
         />
       ))}
@@ -96,10 +96,10 @@ function ReorderItem({
           display: 'flex',
           alignItems: 'center',
           gap: 12,
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'rgba(255, 255, 255, 0.05)',
           borderRadius: 16,
           padding: 16,
-          border: '1px solid #E9E6FF',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
           userSelect: 'none',
         }}
       >
@@ -120,7 +120,7 @@ function ReorderItem({
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 8,
-            backgroundColor: '#F0EDFF',
+            backgroundColor: 'rgba(107, 78, 255, 0.15)',
             flexShrink: 0,
           }}
         >
@@ -149,7 +149,7 @@ function ReorderItem({
           style={{
             fontSize: 15,
             fontFamily: "'Raleway', sans-serif",
-            color: '#1F1F1F',
+            color: '#E8E6E3',
             fontWeight: 500,
             flex: 1,
           }}
@@ -170,7 +170,7 @@ export function DragReorder() {
   return (
     <section
       style={{
-        backgroundColor: '#F6F4EF',
+        backgroundColor: 'var(--bg-primary, #0F0F13)',
         padding: '72px 24px',
         display: 'flex',
         flexDirection: 'column',
@@ -205,7 +205,7 @@ export function DragReorder() {
             fontFamily: "'Poppins', sans-serif",
             fontSize: 28,
             fontWeight: 600,
-            color: '#1F1F1F',
+            color: '#E8E6E3',
             marginBottom: 8,
             textAlign: 'center',
           }}
@@ -218,7 +218,7 @@ export function DragReorder() {
           style={{
             fontFamily: "'Raleway', sans-serif",
             fontSize: 15,
-            color: '#6B6B6B',
+            color: '#8A8A96',
             marginBottom: 32,
             textAlign: 'center',
           }}
@@ -229,10 +229,10 @@ export function DragReorder() {
         {/* White card container */}
         <div
           style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#1A1A22',
             borderRadius: 20,
             padding: '24px 20px',
-            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.06)',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.2)',
           }}
         >
           <Reorder.Group

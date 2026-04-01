@@ -98,23 +98,32 @@ const spring = {
   mass: 0.8,
 };
 
-const gentleSpring = {
+const modalSpring = {
   type: "spring" as const,
-  stiffness: 180,
-  damping: 22,
-  mass: 1,
+  stiffness: 400,
+  damping: 30,
 };
 
 const backdropVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.25 } },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
+  visible: { opacity: 1, transition: { duration: 0.2 } },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+const modalVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { type: "spring", stiffness: 400, damping: 30 },
+  },
+  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.15 } },
 };
 
 const detailContainerVariants: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.18 },
+    transition: { staggerChildren: 0.07, delayChildren: 0.12 },
   },
 };
 
@@ -129,14 +138,14 @@ const detailItemVariants: Variants = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Glassmorphism card styles                                          */
+/*  Glassmorphism card styles (dark)                                   */
 /* ------------------------------------------------------------------ */
 
 const glassCard: React.CSSProperties = {
-  background: "rgba(255, 255, 255, 0.7)",
-  backdropFilter: "blur(12px)",
-  WebkitBackdropFilter: "blur(12px)",
-  border: "1px solid rgba(255, 255, 255, 0.3)",
+  background: "rgba(255, 255, 255, 0.05)",
+  backdropFilter: "blur(16px)",
+  WebkitBackdropFilter: "blur(16px)",
+  border: "1px solid rgba(255, 255, 255, 0.08)",
   borderRadius: "16px",
   position: "relative",
   overflow: "hidden",
@@ -157,7 +166,7 @@ export function ClientCards() {
   return (
     <section
       style={{
-        background: "#F6F4EF",
+        background: "var(--bg-primary, #0F0F13)",
         padding: "7rem 1.5rem",
         display: "flex",
         flexDirection: "column",
@@ -193,7 +202,7 @@ export function ClientCards() {
           fontFamily: "var(--font-display, 'Poppins', sans-serif)",
           fontWeight: 700,
           fontSize: "clamp(1.75rem, 4.5vw, 3rem)",
-          color: "#1F1F1F",
+          color: "#E8E6E3",
           margin: 0,
           textAlign: "center",
           letterSpacing: "-0.02em",
@@ -211,7 +220,7 @@ export function ClientCards() {
         style={{
           fontFamily: "var(--font-body, 'Raleway', sans-serif)",
           fontSize: "clamp(0.95rem, 1.6vw, 1.15rem)",
-          color: "#6B6B6B",
+          color: "#AAAAAA",
           marginTop: "0.85rem",
           marginBottom: "3.5rem",
           textAlign: "center",
@@ -237,25 +246,23 @@ export function ClientCards() {
         {clients.map((card, i) => (
           <motion.div
             key={card.id}
-            layoutId={`card-${card.id}`}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ ...spring, delay: i * 0.08 }}
             whileHover={{
               y: -4,
-              boxShadow: "0 16px 40px rgba(0, 0, 0, 0.10)",
+              boxShadow: "0 16px 40px rgba(0, 0, 0, 0.25)",
             }}
             onClick={() => open(card.id)}
             style={{
               ...glassCard,
               padding: "1.6rem 1.6rem 1.6rem 1.85rem",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
             }}
           >
             {/* Left accent bar */}
-            <motion.div
-              layoutId={`accent-${card.id}`}
+            <div
               style={{
                 position: "absolute",
                 top: 0,
@@ -268,8 +275,7 @@ export function ClientCards() {
             />
 
             {/* Badge */}
-            <motion.span
-              layoutId={`badge-${card.id}`}
+            <span
               style={{
                 display: "inline-block",
                 fontFamily: "var(--font-display, 'Poppins', sans-serif)",
@@ -285,42 +291,40 @@ export function ClientCards() {
               }}
             >
               {card.status}
-            </motion.span>
+            </span>
 
             {/* Title */}
-            <motion.h3
-              layoutId={`title-${card.id}`}
+            <h3
               style={{
                 fontFamily: "var(--font-display, 'Poppins', sans-serif)",
                 fontWeight: 600,
                 fontSize: "1.15rem",
-                color: "#1F1F1F",
+                color: "#E8E6E3",
                 margin: 0,
                 lineHeight: 1.3,
               }}
             >
               {card.name}
-            </motion.h3>
+            </h3>
 
             {/* Service line */}
-            <motion.p
-              layoutId={`service-${card.id}`}
+            <p
               style={{
                 fontFamily: "var(--font-body, 'Raleway', sans-serif)",
                 fontSize: "0.88rem",
-                color: "#8A8A8A",
+                color: "#8A8A96",
                 marginTop: "0.35rem",
                 marginBottom: 0,
                 lineHeight: 1.4,
               }}
             >
               {card.service}
-            </motion.p>
+            </p>
           </motion.div>
         ))}
       </div>
 
-      {/* ---- Expanded Overlay ---- */}
+      {/* ---- Modal Overlay ---- */}
       <AnimatePresence>
         {selectedCard && (
           <>
@@ -335,7 +339,7 @@ export function ClientCards() {
               style={{
                 position: "fixed",
                 inset: 0,
-                background: "rgba(31, 31, 31, 0.35)",
+                background: "rgba(0, 0, 0, 0.6)",
                 backdropFilter: "blur(8px)",
                 WebkitBackdropFilter: "blur(8px)",
                 zIndex: 998,
@@ -343,32 +347,36 @@ export function ClientCards() {
               }}
             />
 
-            {/* Expanded card */}
+            {/* Modal card */}
             <motion.div
-              key="expanded-card"
-              layoutId={`card-${selectedCard.id}`}
-              transition={gentleSpring}
+              key="modal-card"
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={modalSpring}
               style={{
-                ...glassCard,
                 position: "fixed",
                 top: "50%",
                 left: "50%",
-                x: "-50%",
-                y: "-50%",
+                transform: "translate(-50%, -50%)",
                 width: "min(92vw, 600px)",
                 maxHeight: "85vh",
                 overflowY: "auto",
                 padding: "2.5rem 2.5rem 2.5rem 2.75rem",
                 zIndex: 999,
                 boxShadow:
-                  "0 32px 80px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(255,255,255,0.15)",
-                background: "rgba(255, 255, 255, 0.85)",
+                  "0 32px 80px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.06)",
+                background: "rgba(26, 26, 34, 0.95)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "16px",
                 cursor: "default",
               }}
             >
               {/* Accent bar */}
-              <motion.div
-                layoutId={`accent-${selectedCard.id}`}
+              <div
                 style={{
                   position: "absolute",
                   top: 0,
@@ -395,8 +403,8 @@ export function ClientCards() {
                   width: "2.25rem",
                   height: "2.25rem",
                   borderRadius: "50%",
-                  border: "1px solid rgba(0,0,0,0.06)",
-                  background: "rgba(255, 255, 255, 0.7)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: "rgba(255, 255, 255, 0.05)",
                   backdropFilter: "blur(6px)",
                   WebkitBackdropFilter: "blur(6px)",
                   cursor: "pointer",
@@ -404,27 +412,26 @@ export function ClientCards() {
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: "1.2rem",
-                  color: "#1F1F1F",
+                  color: "#E8E6E3",
                   fontWeight: 300,
                   lineHeight: 1,
                   transition: "background 0.15s, border-color 0.15s",
                   zIndex: 2,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(107, 78, 255, 0.08)";
-                  e.currentTarget.style.borderColor = "rgba(107, 78, 255, 0.2)";
+                  e.currentTarget.style.background = "rgba(107, 78, 255, 0.15)";
+                  e.currentTarget.style.borderColor = "rgba(107, 78, 255, 0.3)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.7)";
-                  e.currentTarget.style.borderColor = "rgba(0,0,0,0.06)";
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
                 }}
               >
                 {"\u00D7"}
               </motion.button>
 
               {/* Badge */}
-              <motion.span
-                layoutId={`badge-${selectedCard.id}`}
+              <span
                 style={{
                   display: "inline-block",
                   fontFamily: "var(--font-display, 'Poppins', sans-serif)",
@@ -440,16 +447,15 @@ export function ClientCards() {
                 }}
               >
                 {selectedCard.status}
-              </motion.span>
+              </span>
 
               {/* Title */}
-              <motion.h3
-                layoutId={`title-${selectedCard.id}`}
+              <h3
                 style={{
                   fontFamily: "var(--font-display, 'Poppins', sans-serif)",
                   fontWeight: 700,
                   fontSize: "1.65rem",
-                  color: "#1F1F1F",
+                  color: "#E8E6E3",
                   margin: 0,
                   lineHeight: 1.25,
                   letterSpacing: "-0.01em",
@@ -457,22 +463,21 @@ export function ClientCards() {
                 }}
               >
                 {selectedCard.name}
-              </motion.h3>
+              </h3>
 
               {/* Service */}
-              <motion.p
-                layoutId={`service-${selectedCard.id}`}
+              <p
                 style={{
                   fontFamily: "var(--font-body, 'Raleway', sans-serif)",
                   fontSize: "1rem",
-                  color: "#8A8A8A",
+                  color: "#8A8A96",
                   marginTop: "0.4rem",
                   marginBottom: 0,
                   lineHeight: 1.4,
                 }}
               >
                 {selectedCard.service}
-              </motion.p>
+              </p>
 
               {/* Divider */}
               <motion.div
@@ -510,7 +515,7 @@ export function ClientCards() {
                     style={{
                       fontFamily: "var(--font-body, 'Raleway', sans-serif)",
                       fontSize: "0.95rem",
-                      color: "#3A3A3A",
+                      color: "#AAAAAA",
                       lineHeight: 1.55,
                       paddingLeft: "1.25rem",
                       position: "relative",

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
 
 export function DarkModeToggle() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
 
   useEffect(() => {
     const root = document.documentElement;

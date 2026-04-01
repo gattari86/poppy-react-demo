@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const PURPLE = "#6B4EFF";
-const BG = "#F6F4EF";
+const BG = "var(--bg-primary, #0F0F13)";
 
 const tabs = ["Dashboard", "Projects", "Settings"] as const;
 type Tab = (typeof tabs)[number];
@@ -34,19 +34,19 @@ function DashboardContent() {
         <div
           key={m.label}
           style={{
-            background: "rgba(255, 255, 255, 0.45)",
+            background: "rgba(255, 255, 255, 0.05)",
             backdropFilter: "blur(12px)",
             WebkitBackdropFilter: "blur(12px)",
             borderTop: `3px solid ${PURPLE}`,
             borderRadius: 12,
-            border: "1px solid rgba(107, 78, 255, 0.15)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
             borderTopWidth: 3,
             borderTopColor: PURPLE,
             padding: "1.5rem",
             textAlign: "center" as const,
           }}
         >
-          <p style={{ fontSize: 14, opacity: 0.55, marginBottom: 4 }}>
+          <p style={{ fontSize: 14, color: "#8A8A96", marginBottom: 4 }}>
             {m.label}
           </p>
           <p
@@ -92,13 +92,13 @@ function ProjectsContent() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            background: "#fff",
-            border: "1px solid #E9E6FF",
+            background: "rgba(255, 255, 255, 0.05)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
             borderRadius: 10,
             padding: "12px 20px",
           }}
         >
-          <span style={{ fontWeight: 500, fontSize: 15, color: "#1F1F1F" }}>
+          <span style={{ fontWeight: 500, fontSize: 15, color: "#E8E6E3" }}>
             {p.name}
           </span>
           <span
@@ -152,13 +152,13 @@ function SettingsContent() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            background: "#fff",
-            border: "1px solid #E9E6FF",
+            background: "rgba(255, 255, 255, 0.05)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
             borderRadius: 10,
             padding: "14px 20px",
           }}
         >
-          <span style={{ fontWeight: 500, fontSize: 15, color: "#1F1F1F" }}>
+          <span style={{ fontWeight: 500, fontSize: 15, color: "#E8E6E3" }}>
             {t.label}
           </span>
           <button
@@ -242,14 +242,14 @@ export function AnimatedTabs() {
             style={{
               fontSize: 32,
               fontWeight: 600,
-              color: "#1F1F1F",
+              color: "#E8E6E3",
               marginBottom: 8,
               fontFamily: "var(--font-poppins, Poppins, sans-serif)",
             }}
           >
             Animated Transitions
           </h2>
-          <p style={{ fontSize: 15, color: "#1F1F1F", opacity: 0.55 }}>
+          <p style={{ fontSize: 15, color: "#8A8A96" }}>
             Content exits with physics before new content enters. No page reload
             needed.
           </p>
@@ -279,7 +279,7 @@ export function AnimatedTabs() {
                 background: "none",
                 border: "none",
                 cursor: "pointer",
-                color: activeTab === tab ? PURPLE : "#71717A",
+                color: activeTab === tab ? PURPLE : "#8A8A96",
                 transition: "color 0.2s ease",
                 whiteSpace: "nowrap",
                 flexShrink: 0,
@@ -291,7 +291,7 @@ export function AnimatedTabs() {
               }}
               onMouseLeave={(e) => {
                 if (activeTab !== tab) {
-                  e.currentTarget.style.color = "#71717A";
+                  e.currentTarget.style.color = "#8A8A96";
                 }
               }}
             >

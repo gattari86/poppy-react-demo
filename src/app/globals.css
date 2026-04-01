@@ -10,8 +10,21 @@
   --font-body: var(--font-raleway);
 }
 
-/* Light mode (default) */
+/* Dark mode (default) */
 :root,
+[data-theme="dark"] {
+  --bg-primary: #0F0F13;
+  --bg-surface: #1A1A22;
+  --bg-surface-hover: #22222E;
+  --text-primary: #E8E6E3;
+  --text-secondary: #AAAAAA;
+  --text-muted: #8A8A96;
+  --border: #2A2A36;
+  --accent: #6B4EFF;
+  --accent-light: #9B85FF;
+}
+
+/* Light mode (toggle) */
 [data-theme="light"] {
   --bg-primary: #F6F4EF;
   --bg-surface: #FFFFFF;
@@ -22,17 +35,6 @@
   --border: rgba(31, 31, 31, 0.08);
   --accent: #6B4EFF;
   --accent-light: #9B85FF;
-}
-
-/* Dark mode */
-[data-theme="dark"] {
-  --bg-primary: #0F0F13;
-  --bg-surface: #1A1A21;
-  --bg-surface-hover: #22222E;
-  --text-primary: #E8E6E3;
-  --text-secondary: #9E9BA3;
-  --text-muted: #8A8A96;
-  --border: rgba(232, 230, 227, 0.08);
 }
 
 body {

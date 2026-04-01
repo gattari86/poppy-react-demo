@@ -158,7 +158,7 @@ export function PexelsGallery() {
             fontFamily: "var(--font-display, 'Poppins', sans-serif)",
             fontWeight: 600,
             fontSize: "clamp(2rem, 4.5vw, 3rem)",
-            color: "#1F1F1F",
+            color: "#E8E6E3",
             margin: 0,
             letterSpacing: "-0.02em",
             lineHeight: 1.15,
@@ -171,7 +171,7 @@ export function PexelsGallery() {
             fontFamily: "var(--font-body, 'Raleway', sans-serif)",
             fontWeight: 400,
             fontSize: "1.05rem",
-            color: "#777",
+            color: "#8A8A96",
             marginTop: "0.75rem",
           }}
         >

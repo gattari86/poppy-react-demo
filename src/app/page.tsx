@@ -7,6 +7,7 @@ import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { Footer } from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 import { PexelsGallery } from "@/components/PexelsGallery";
+import { VideoShowcase } from "@/components/VideoShowcase";
 import { FilmGrain } from "@/components/FilmGrain";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
         <DragReorder />
       </section>
       <ScrollSection />
+      <VideoShowcase />
       <section style={{ padding: "6rem 2rem", background: "var(--bg-primary)" }}>
         <AnimatedTabs />
       </section>
