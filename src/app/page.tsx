@@ -6,10 +6,13 @@ import { AnimatedTabs } from "@/components/AnimatedTabs";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { Footer } from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
+import { PexelsGallery } from "@/components/PexelsGallery";
+import { FilmGrain } from "@/components/FilmGrain";
 
 export default function Home() {
   return (
     <main>
+      <FilmGrain />
       <ScrollProgress />
       <DarkModeToggle />
 
@@ -27,6 +30,10 @@ export default function Home() {
 
       <section className="py-24 px-8">
         <AnimatedTabs />
+      </section>
+
+      <section className="py-24 px-8">
+        <PexelsGallery />
       </section>
 
       <Footer />
