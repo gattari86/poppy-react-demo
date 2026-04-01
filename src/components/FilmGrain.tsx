@@ -18,7 +18,7 @@ export function FilmGrain() {
         inset: 0,
         pointerEvents: "none",
         zIndex: 9000,
-        opacity: 0.03,
+        opacity: 0.04,
         mixBlendMode: "multiply",
       }}
     >

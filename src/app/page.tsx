@@ -15,27 +15,20 @@ export default function Home() {
       <FilmGrain />
       <ScrollProgress />
       <DarkModeToggle />
-
       <HeroSection />
-
-      <section className="py-24 px-8">
+      <section style={{ padding: "6rem 2rem", background: "var(--bg-primary)" }}>
         <ClientCards />
       </section>
-
-      <section className="py-24 px-8 max-w-4xl mx-auto">
+      <section style={{ padding: "6rem 2rem", background: "var(--bg-primary)" }}>
         <DragReorder />
       </section>
-
       <ScrollSection />
-
-      <section className="py-24 px-8">
+      <section style={{ padding: "6rem 2rem", background: "var(--bg-primary)" }}>
         <AnimatedTabs />
       </section>
-
-      <section className="py-24 px-8">
+      <section style={{ padding: "6rem 2rem", background: "var(--bg-primary)" }}>
         <PexelsGallery />
       </section>
-
       <Footer />
     </main>
   );

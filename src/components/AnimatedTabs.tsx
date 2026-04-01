@@ -3,8 +3,23 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+const PURPLE = "#6B4EFF";
+const BG = "#F6F4EF";
+
 const tabs = ["Dashboard", "Projects", "Settings"] as const;
 type Tab = (typeof tabs)[number];
+
+/* ------------------------------------------------------------------ */
+/*  Spring configs                                                     */
+/* ------------------------------------------------------------------ */
+
+const contentSpring = { type: "spring" as const, stiffness: 300, damping: 30 };
+const toggleSpring = { type: "spring" as const, stiffness: 500, damping: 30 };
+const underlineSpring = { type: "spring" as const, stiffness: 400, damping: 30 };
+
+/* ------------------------------------------------------------------ */
+/*  Dashboard                                                          */
+/* ------------------------------------------------------------------ */
 
 function DashboardContent() {
   const metrics = [
@@ -18,11 +33,30 @@ function DashboardContent() {
       {metrics.map((m) => (
         <div
           key={m.label}
-          className="rounded-xl border border-[#E9E6FF] p-6 text-center"
-          style={{ backgroundColor: "var(--color-bg)" }}
+          style={{
+            background: "rgba(255, 255, 255, 0.45)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            borderTop: `3px solid ${PURPLE}`,
+            borderRadius: 12,
+            border: "1px solid rgba(107, 78, 255, 0.15)",
+            borderTopWidth: 3,
+            borderTopColor: PURPLE,
+            padding: "1.5rem",
+            textAlign: "center" as const,
+          }}
         >
-          <p className="text-sm opacity-60 mb-1">{m.label}</p>
-          <p className="text-3xl font-semibold" style={{ color: "#6B4EFF" }}>
+          <p style={{ fontSize: 14, opacity: 0.55, marginBottom: 4 }}>
+            {m.label}
+          </p>
+          <p
+            style={{
+              fontSize: 32,
+              fontWeight: 700,
+              color: PURPLE,
+              lineHeight: 1.2,
+            }}
+          >
             {m.value}
           </p>
         </div>
@@ -31,26 +65,52 @@ function DashboardContent() {
   );
 }
 
-function ProjectsContent() {
-  const projects = [
-    { name: "Website Redesign", status: "In Progress", color: "#6B4EFF" },
-    { name: "SEO Audit", status: "Complete", color: "#22c55e" },
-    { name: "Ad Campaign Q2", status: "Planning", color: "#f59e0b" },
-    { name: "Brand Refresh", status: "In Review", color: "#6B4EFF" },
-  ];
+/* ------------------------------------------------------------------ */
+/*  Projects                                                           */
+/* ------------------------------------------------------------------ */
 
+interface Project {
+  name: string;
+  status: string;
+  color: string;
+}
+
+const projects: Project[] = [
+  { name: "Verizon Phase 2", status: "In Progress", color: "#3B82F6" },
+  { name: "Albedo Ads", status: "Active", color: "#22C55E" },
+  { name: "Fulshear Dental", status: "Proposal", color: "#F59E0B" },
+  { name: "Bickham Services", status: "Kickoff Apr 20", color: PURPLE },
+];
+
+function ProjectsContent() {
   return (
-    <div className="space-y-3">
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {projects.map((p) => (
         <div
           key={p.name}
-          className="flex items-center justify-between rounded-lg border border-[#E9E6FF] px-5 py-3"
-          style={{ backgroundColor: "var(--color-bg)" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: "#fff",
+            border: "1px solid #E9E6FF",
+            borderRadius: 10,
+            padding: "12px 20px",
+          }}
         >
-          <span className="font-medium">{p.name}</span>
+          <span style={{ fontWeight: 500, fontSize: 15, color: "#1F1F1F" }}>
+            {p.name}
+          </span>
           <span
-            className="text-xs font-semibold px-3 py-1 rounded-full text-white"
-            style={{ backgroundColor: p.color }}
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              padding: "4px 14px",
+              borderRadius: 9999,
+              color: "#fff",
+              backgroundColor: p.color,
+              whiteSpace: "nowrap",
+            }}
           >
             {p.status}
           </span>
@@ -60,38 +120,76 @@ function ProjectsContent() {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/*  Settings (with working toggles)                                    */
+/* ------------------------------------------------------------------ */
+
 function SettingsContent() {
-  const [notifications, setNotifications] = useState(true);
+  const [emailNotifications, setEmailNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [autoReports, setAutoReports] = useState(true);
 
-  const toggles = [
-    { label: "Notifications", value: notifications, set: setNotifications },
+  const toggles: Array<{
+    label: string;
+    value: boolean;
+    set: React.Dispatch<React.SetStateAction<boolean>>;
+  }> = [
+    {
+      label: "Email Notifications",
+      value: emailNotifications,
+      set: setEmailNotifications,
+    },
     { label: "Dark Mode", value: darkMode, set: setDarkMode },
     { label: "Auto-Reports", value: autoReports, set: setAutoReports },
   ];
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {toggles.map((t) => (
         <div
           key={t.label}
-          className="flex items-center justify-between rounded-lg border border-[#E9E6FF] px-5 py-4"
-          style={{ backgroundColor: "var(--color-bg)" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: "#fff",
+            border: "1px solid #E9E6FF",
+            borderRadius: 10,
+            padding: "14px 20px",
+          }}
         >
-          <span className="font-medium">{t.label}</span>
+          <span style={{ fontWeight: 500, fontSize: 15, color: "#1F1F1F" }}>
+            {t.label}
+          </span>
           <button
-            onClick={() => t.set(!t.value)}
-            className="relative w-12 h-6 rounded-full transition-colors duration-300"
-            style={{
-              backgroundColor: t.value ? "#6B4EFF" : "#ccc",
-            }}
+            type="button"
+            onClick={() => t.set((prev) => !prev)}
             aria-label={`Toggle ${t.label}`}
+            aria-pressed={t.value}
+            style={{
+              position: "relative",
+              width: 48,
+              height: 26,
+              borderRadius: 9999,
+              border: "none",
+              cursor: "pointer",
+              backgroundColor: t.value ? PURPLE : "#D1D5DB",
+              transition: "background-color 0.2s ease",
+              flexShrink: 0,
+            }}
           >
             <motion.div
-              className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow"
-              animate={{ left: t.value ? "1.625rem" : "0.125rem" }}
-              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              style={{
+                position: "absolute",
+                top: 3,
+                width: 20,
+                height: 20,
+                borderRadius: "50%",
+                background: "#fff",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+              }}
+              animate={{ left: t.value ? 25 : 3 }}
+              transition={toggleSpring}
             />
           </button>
         </div>
@@ -100,74 +198,137 @@ function SettingsContent() {
   );
 }
 
-const tabContent: Record<Tab, () => React.ReactElement> = {
-  Dashboard: DashboardContent,
-  Projects: ProjectsContent,
-  Settings: SettingsContent,
+/* ------------------------------------------------------------------ */
+/*  Tab content map                                                    */
+/* ------------------------------------------------------------------ */
+
+const tabContent: Record<Tab, React.ReactNode> = {
+  Dashboard: <DashboardContent />,
+  Projects: <ProjectsContent />,
+  Settings: <SettingsContent />,
 };
 
-const slideVariants = {
-  enter: { x: 60, opacity: 0 },
-  center: { x: 0, opacity: 1 },
-  exit: { x: -60, opacity: 0 },
-};
+/* ------------------------------------------------------------------ */
+/*  Main component                                                     */
+/* ------------------------------------------------------------------ */
 
 export function AnimatedTabs() {
   const [activeTab, setActiveTab] = useState<Tab>("Dashboard");
-  const Content = tabContent[activeTab];
 
   return (
-    <section className="w-full max-w-2xl mx-auto py-16 px-4">
-      <div className="text-center mb-10">
-        <h2
-          className="text-3xl font-semibold mb-2"
-          style={{ fontFamily: "var(--font-poppins, Poppins, sans-serif)" }}
-        >
-          Animated Page Transitions
-        </h2>
-        <p className="opacity-60 text-sm">
-          Content exits and enters with physics. No page reload.
-        </p>
-      </div>
-
-      {/* Tab bar */}
-      <div className="flex justify-center gap-2 mb-8">
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className="relative px-5 py-2 text-sm font-medium rounded-md transition-colors"
+    <section
+      style={{
+        width: "100%",
+        backgroundColor: BG,
+        padding: "64px 16px",
+      }}
+    >
+      <div style={{ maxWidth: 680, margin: "0 auto" }}>
+        {/* Section header */}
+        <div style={{ textAlign: "center", marginBottom: 40 }}>
+          <p
             style={{
-              color: activeTab === tab ? "#fff" : "#1F1F1F",
+              fontSize: 13,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              color: PURPLE,
+              marginBottom: 8,
             }}
           >
-            {activeTab === tab && (
-              <motion.div
-                layoutId="activeTab"
-                className="absolute inset-0 rounded-md"
-                style={{ backgroundColor: "#6B4EFF" }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              />
-            )}
-            <span className="relative z-10">{tab}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Tab content */}
-      <div className="relative min-h-[220px]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ type: "spring", stiffness: 300, damping: 28 }}
+            Interactive Demo
+          </p>
+          <h2
+            style={{
+              fontSize: 32,
+              fontWeight: 600,
+              color: "#1F1F1F",
+              marginBottom: 8,
+              fontFamily: "var(--font-poppins, Poppins, sans-serif)",
+            }}
           >
-            <Content />
-          </motion.div>
-        </AnimatePresence>
+            Animated Transitions
+          </h2>
+          <p style={{ fontSize: 15, color: "#1F1F1F", opacity: 0.55 }}>
+            Content exits with physics before new content enters. No page reload
+            needed.
+          </p>
+        </div>
+
+        {/* Tab bar */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 8,
+            marginBottom: 32,
+            overflowX: "auto",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+              style={{
+                position: "relative",
+                padding: "8px 20px",
+                fontSize: 14,
+                fontWeight: 500,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: activeTab === tab ? PURPLE : "#71717A",
+                transition: "color 0.2s ease",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== tab) {
+                  e.currentTarget.style.color = PURPLE;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== tab) {
+                  e.currentTarget.style.color = "#71717A";
+                }
+              }}
+            >
+              <span style={{ position: "relative", zIndex: 1 }}>{tab}</span>
+              {activeTab === tab && (
+                <motion.div
+                  layoutId="tab-underline"
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 8,
+                    right: 8,
+                    height: 2,
+                    borderRadius: 1,
+                    backgroundColor: PURPLE,
+                  }}
+                  transition={underlineSpring}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab content with AnimatePresence */}
+        <div style={{ position: "relative", minHeight: 220 }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ x: 50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -50, opacity: 0 }}
+              transition={contentSpring}
+            >
+              {tabContent[activeTab]}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   );

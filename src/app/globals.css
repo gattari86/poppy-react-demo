@@ -10,8 +10,46 @@
   --font-body: var(--font-raleway);
 }
 
+/* Light mode (default) */
+:root,
+[data-theme="light"] {
+  --bg-primary: #F6F4EF;
+  --bg-surface: #FFFFFF;
+  --bg-surface-hover: #F0EDE8;
+  --text-primary: #1F1F1F;
+  --text-secondary: #6B6873;
+  --text-muted: #8A8A96;
+  --border: rgba(31, 31, 31, 0.08);
+  --accent: #6B4EFF;
+  --accent-light: #9B85FF;
+}
+
+/* Dark mode */
+[data-theme="dark"] {
+  --bg-primary: #0F0F13;
+  --bg-surface: #1A1A21;
+  --bg-surface-hover: #22222E;
+  --text-primary: #E8E6E3;
+  --text-secondary: #9E9BA3;
+  --text-muted: #8A8A96;
+  --border: rgba(232, 230, 227, 0.08);
+}
+
 body {
-  background: #F6F4EF;
-  color: #1F1F1F;
-  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body), 'Raleway', Arial, sans-serif;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+*,
+*::before,
+*::after {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Exclude framer-motion animated elements from the global transition */
+[style*="transform"] > div,
+button > div {
+  transition: none;
 }

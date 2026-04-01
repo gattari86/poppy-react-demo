@@ -3,109 +3,126 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-/**
- * PexelsGallery
- * A masonry-style image gallery with Framer Motion hover effects
- * and staggered entrance animations.
- *
- * Uses hardcoded Pexels URLs (API key not exposed to client).
- */
-
-const GALLERY_IMAGES = [
+const GALLERY_ITEMS = [
   {
     src: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=600",
     alt: "Team meeting around a table",
+    name: "Verizon CMC",
   },
   {
     src: "https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=600",
     alt: "Strategy planning session",
+    name: "Albedos Return",
   },
   {
     src: "https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg?auto=compress&cs=tinysrgb&w=600",
     alt: "Focused laptop work",
+    name: "ReadyNest Safety",
   },
   {
     src: "https://images.pexels.com/photos/5473955/pexels-photo-5473955.jpeg?auto=compress&cs=tinysrgb&w=600",
     alt: "Creative workspace",
+    name: "Negocio Listo",
   },
   {
     src: "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=600",
     alt: "Team collaboration",
+    name: "Mary Moras",
   },
   {
     src: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600",
     alt: "Group discussion",
+    name: "Corridos Perrones",
   },
-];
-
-// Vary heights to create a masonry feel
-const HEIGHTS = ["280px", "340px", "300px", "320px", "290px", "350px"];
+] as const;
 
 function GalleryCard({
-  image,
-  height,
+  item,
   index,
 }: {
-  image: (typeof GALLERY_IMAGES)[number];
-  height: string;
+  item: (typeof GALLERY_ITEMS)[number];
   index: number;
 }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(cardRef, { once: true, margin: "-60px" });
+  const height = index % 2 === 0 ? 280 : 360;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
+      ref={cardRef}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{
-        duration: 0.5,
+        duration: 0.55,
         delay: index * 0.1,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
-      whileHover={{ scale: 1.03 }}
+      whileHover="hovered"
       style={{
         position: "relative",
-        borderRadius: "12px",
+        borderRadius: "1rem",
         overflow: "hidden",
         height,
         cursor: "pointer",
       }}
     >
-      <img
-        src={image.src}
-        alt={image.alt}
+      <motion.img
+        src={item.src}
+        alt={item.alt}
         loading="lazy"
+        variants={{
+          hovered: { scale: 1.08 },
+        }}
+        transition={{ type: "spring", stiffness: 260, damping: 20 }}
         style={{
           width: "100%",
           height: "100%",
           objectFit: "cover",
           display: "block",
+          transformOrigin: "center center",
         }}
       />
-      {/* Hover overlay */}
+
       <motion.div
+        variants={{
+          hovered: { opacity: 1 },
+        }}
         initial={{ opacity: 0 }}
-        whileHover={{ opacity: 1 }}
-        transition={{ duration: 0.25 }}
+        transition={{ type: "spring", stiffness: 260, damping: 20 }}
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(to top, rgba(107, 78, 255, 0.75) 0%, rgba(31, 31, 31, 0.3) 100%)",
+            "linear-gradient(to top, rgba(107,78,255,0.6) 0%, transparent 60%)",
           display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          justifyContent: "flex-end",
           padding: "1.5rem",
+          gap: "0.35rem",
         }}
       >
         <span
           style={{
             fontFamily: "var(--font-display, 'Poppins', sans-serif)",
             fontWeight: 600,
-            fontSize: "0.95rem",
-            color: "#F6F4EF",
-            letterSpacing: "0.04em",
-            textTransform: "uppercase",
+            fontSize: "1.15rem",
+            color: "#fff",
+            lineHeight: 1.2,
           }}
         >
-          View Project
+          {item.name}
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--font-body, 'Raleway', sans-serif)",
+            fontWeight: 500,
+            fontSize: "0.85rem",
+            color: "rgba(255,255,255,0.85)",
+            letterSpacing: "0.03em",
+          }}
+        >
+          View Project &rarr;
         </span>
       </motion.div>
     </motion.div>
@@ -113,65 +130,90 @@ function GalleryCard({
 }
 
 export function PexelsGallery() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
     <section
       style={{
-        padding: "5rem 2rem",
-        background: "#F6F4EF",
+        padding: "6rem 2rem",
+        background: "var(--bg-primary, #F6F4EF)",
       }}
     >
       {/* Section header */}
-      <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+      <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+        <span
+          style={{
+            fontFamily: "var(--font-display, 'Poppins', sans-serif)",
+            fontWeight: 600,
+            fontSize: "0.85rem",
+            color: "#6B4EFF",
+            textTransform: "uppercase",
+            letterSpacing: "0.12em",
+            display: "block",
+            marginBottom: "0.75rem",
+          }}
+        >
+          Portfolio
+        </span>
         <h2
           style={{
             fontFamily: "var(--font-display, 'Poppins', sans-serif)",
             fontWeight: 600,
-            fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
+            fontSize: "clamp(2rem, 4.5vw, 3rem)",
             color: "#1F1F1F",
             margin: 0,
-            letterSpacing: "-0.01em",
+            letterSpacing: "-0.02em",
+            lineHeight: 1.15,
           }}
         >
-          Portfolio Gallery
+          Work That Speaks
         </h2>
         <p
           style={{
             fontFamily: "var(--font-body, 'Raleway', sans-serif)",
             fontWeight: 400,
-            fontSize: "1rem",
-            color: "#888",
-            marginTop: "0.6rem",
+            fontSize: "1.05rem",
+            color: "#777",
+            marginTop: "0.75rem",
           }}
         >
-          Pexels API + Framer Motion hover effects
+          Pexels API integration + Framer Motion hover effects
         </p>
       </div>
 
       {/* Masonry grid */}
       <div
-        ref={ref}
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "1.2rem",
-          maxWidth: "64rem",
-          marginLeft: "auto",
-          marginRight: "auto",
+          gap: "1.25rem",
+          maxWidth: "68rem",
+          marginInline: "auto",
         }}
+        className="pexels-grid"
       >
-        {isInView &&
-          GALLERY_IMAGES.map((image, i) => (
-            <GalleryCard
-              key={image.src}
-              image={image}
-              height={HEIGHTS[i]}
-              index={i}
-            />
-          ))}
+        {GALLERY_ITEMS.map((item, i) => (
+          <GalleryCard key={item.src} item={item} index={i} />
+        ))}
       </div>
+
+      <style>{`
+        .pexels-grid {
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 640px) {
+          .pexels-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        @media (min-width: 1024px) {
+          .pexels-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+        @media (max-width: 639px) {
+          .pexels-grid > div {
+            height: 280px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
